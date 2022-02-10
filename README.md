@@ -1,5 +1,7 @@
 # Brother MFC-7860DW Printer FTP Server
 
+![diagram](docs/diagram.png)
+
 Run an FTP server as a Docker Compose service that is connectable from my printer, a Brother
 MFC-7860DW. This printer is quite old but does support FTP transfer of scans. As far as I can tell,
 this is the best way to get scans off of it.
@@ -21,7 +23,7 @@ but has been edited so that I don't have to commit the secret to version control
 2. Save the username and password of the FTP server in a file in the build context of the server
    image:
 
-   *Note: I save these in my password manager.*
+   *Note: I keep these in my password manager too.*
 
    ```shell
    cp docker-vsftpd/virtual_users.template.txt docker-vsftpd/virtual_users.txt
