@@ -2,17 +2,40 @@
 
 ![diagram](docs/diagram.png)
 
-Run an FTP server as a Docker Compose service that is connectable from my printer, a Brother
-MFC-7860DW. This printer is quite old but does support FTP transfer of scans. As far as I can tell,
-this is the best way to get scans off of it.
+Run an FTP server that accepts scans from my printer, a Brother MFC-7860DW. I bought mine
+2011-08-28, and it's still a solid machine that I hope to use for years to come.
 
-This software and documentation are mostly for me, but if it helps anyone else, all the better. This
-is a solid machine that I hope to use for years to come.
+There are a few ways to get scans off this printer, but I think the FTP method is the
+best:
 
-*Note: The server is based off of
-[docker-vsftpd.git](https://github.com/markhobson/docker-vsftpd.git)
-but has been edited so that I don't have to commit the secret to version control in the
-`docker-compose.yml` file (and to provide some other quality-of-life changes).*
+- Puts workable files immediately on your system.
+- Can be driven entirely from the the printer. Otherwise, you're running back and forth to
+  the computer to start additional scans or to the printer to load more documents.
+- Offers PDF and JPEG outputs.
+
+## Goals
+
+The goals of this repository are to
+
+- Enable the FTP method described above in an always-on fashion.
+- Provide documentation (this readme) to do so in a reproducible way. I've done this
+  so many times over the years, and always forget a detail or two.
+
+## Implementation
+
+- A Docker Compose application that specifies:
+  - An FTP server with a decent level of configurability, logging, and security.
+    - The server is based off of
+      [markhobson/docker-vsftpd.git](https://github.com/markhobson/docker-vsftpd.git), with some
+      quality of life improvements.
+  - Bind mounting of the FTP server's file storage to a convenient directory on my filesystem.
+  - A restart policy of `unless-stopped`. This has Docker bring the application automatically up if
+    I restart my my computer.
+
+### Alternatives Considered
+
+- There are some GUI Windows FTP servers, but I could not find one that I liked. You
+  could save yourself time if you just want to go that route.
 
 ## Steps
 
@@ -80,7 +103,6 @@ but has been edited so that I don't have to commit the secret to version control
    6. Record the displayed IP address.
 
       ![ip on lcd](docs/ip.png)
-
 
 7. Navigate to that IP address in a browser. Then, in the navigational menu, go to:
 
