@@ -11,7 +11,14 @@ but has been edited so that I don't have to commit the secret to version control
 
 ## Steps
 
-1. Save the username and password of the FTP server in a file in the build context of the server
+1. Get the git submodule that contains the dockerized vsftpd:
+
+   ```shell
+   git submodule init
+   git submodule update
+   ```
+
+2. Save the username and password of the FTP server in a file in the build context of the server
    image:
 
    *Note: I save these in my password manager.*
@@ -21,16 +28,31 @@ but has been edited so that I don't have to commit the secret to version control
    vi docker-vsftpd/virtual_users.txt
    ```
 
-2. Ensure the volume bind source in `docker-compose.yml` exists. Default is
+3. Ensure the volume bind source in `docker-compose.yml` exists. Default is
    `C:\Users\tim\Desktop\scans`. Update it if not.
 
-3. Run this docker compose service:
+4. Run this docker compose service:
 
    ```shell
    docker compose up --detach --build --always-recreate-deps  # or simply `make up` if you have make
    ```
 
-4. Find the printer's IP address on the network, and navigate to it in a web browser. In the menu,
+5. Create a firewall rule like the following:
+
+   ![firewall rule](docs/firewall-rule.gif)
+
+   The main parts are:
+
+   - Protocols and Ports tab
+      - Protocols and Ports section
+         - Local port: `Specific Ports` and `20, 21, 21100-21110`
+           (20 is for FTP data, 21 is for FTP control, 21100-21110 are for passive mode.)
+   - Scope tab
+      - Remote IP address section
+         - `These IP addresses:`
+            - `192.168.1.0/24`, or whatever an appropriate CIDR subnet block would be for you.
+
+6. Find the printer's IP address on the network, and navigate to it in a web browser. In the menu,
    go to:
 
    1. Administrator Settings
@@ -74,19 +96,4 @@ but has been edited so that I don't have to commit the secret to version control
      - File Type: `PDF`
      - File Size: `Large`
 
-5. Create a firewall rule like the following:
-
-   ![firewall rule](docs/firewall-rule.gif)
-
-   The main parts are:
-
-   - Protocols and Ports tab
-      - Protocols and Ports section
-         - Local port: `Specific Ports` and `20, 21, 21100-21110`
-           (20 is for FTP data, 21 is for FTP control, 21100-21110 are for passive mode.)
-   - Scope tab
-      - Remote IP address section
-         - `These IP addresses:`
-            - `192.168.1.0/24`, or whatever an appropriate CIDR subnet block would be for you.
-
-6. Do a test scan to ensure it works. 🤞
+7. Do a test scan to ensure it works. 🤞
