@@ -1,25 +1,28 @@
-# Brother MFC-7860DW Printer FTP Server
+# Brother MFC-7860DW Printer/Scanner FTP Server
+
+I have a scanner, the Brother MFC-7860DW, and I want an easy way to scan files from it to my
+computer.
+
+The goal of this repository is to:
+
+- Provide an application that enables "easy" scanning. Specifically, provide a docker container that
+  runs an FTP server, which can then be targetted by the printer. Further, the solution must be able
+  to do the following:
+
+  - Contain no proprietary software that may stop working one day.
+  - Put files immediately on your system.
+  - Can be driven entirely from the the printer. Otherwise, you're running back and forth to the
+    computer to start additional scans or to the printer to load more documents.
+  - Offer PDF and JPEG outputs.
+
+- Document (with this readme) the setup, so it can be reproduced. I've done this so many times over
+  the years, and always forget a detail or two when setting up a new computer or after installation
+  of my OS.
 
 ![diagram](docs/diagram.png)
 
-Run an FTP server that accepts scans from my printer, a Brother MFC-7860DW. I bought mine
-2011-08-28, and it's still a solid machine that I hope to use for years to come.
-
-There are a few ways to get scans off this printer, but I think the FTP method is the
-best:
-
-- Puts workable files immediately on your system.
-- Can be driven entirely from the the printer. Otherwise, you're running back and forth to
-  the computer to start additional scans or to the printer to load more documents.
-- Offers PDF and JPEG outputs.
-
-## Goals
-
-The goals of this repository are to
-
-- Enable the FTP method described above in an always-on fashion.
-- Provide documentation (this readme) to do so in a reproducible way. I've done this
-  so many times over the years, and always forget a detail or two.
+I bought this printer 2011-08-28, and it's still a solid machine that I hope to use for years to
+come. The subscription-ification and DRM of newer printers scares me.
 
 ## Implementation
 
@@ -31,11 +34,7 @@ The goals of this repository are to
   - Bind mounting of the FTP server's file storage to a convenient directory on my filesystem.
   - A restart policy of `unless-stopped`. This has Docker bring the application automatically up if
     I restart my my computer.
-
-### Alternatives Considered
-
-- There are some GUI Windows FTP servers, but I could not find one that I liked. You
-  could save yourself time if you just want to go that route.
+- Firewall rule (for Windows) that permits the incoming connection from the printer.
 
 ## Steps
 
@@ -51,7 +50,8 @@ The goals of this repository are to
 2. Save the username and password of the FTP server in a file in the build context of the server
    image:
 
-   *Note: I keep these in my password manager too.*
+   **Note to self: I keep these in my password manager under
+   `Brother Printer FTP Account to Desktop`**
 
    ```shell
    cp docker-vsftpd/virtual_users.template.txt docker-vsftpd/virtual_users.txt
@@ -67,8 +67,8 @@ The goals of this repository are to
 
    (You can even add more users if you want. Just add more pairs of username/password lines.)
 
-3. Ensure the volume bind source in `docker-compose.yml` exists. Default is
-   `C:\Users\tim\Desktop\scans`. Update it if not.
+3. Ensure the volume bind source (i.e. the directory it points to) in `docker-compose.yml` exists on
+   the host system. Default is `C:\Users\tim\Desktop\scans`. Update it if not.
 
 4. Run this docker compose service:
 
@@ -83,14 +83,14 @@ The goals of this repository are to
    The main parts are:
 
    - Protocols and Ports tab
-      - Protocols and Ports section
-         - Local port: `Specific Ports` and `20, 21, 21100-21110`
-           (20 is for FTP data, 21 is for FTP control, 21100-21110 are for passive mode.)
+     - Protocols and Ports section
+       - Protocol Type: `TCP`
+       - Local port: `Specific Ports` and `20, 21, 21100-21110` (20 is for FTP data, 21 is for FTP
+         control, 21100-21110 are for passive mode.)
    - Scope tab
-      - Remote IP address section
-         - `These IP addresses:`
-            - `192.168.1.0/24`, or whatever an appropriate CIDR subnet block would be for the
-               network.
+     - Remote IP address section
+       - `These IP addresses:`
+         - `192.168.1.0/24`, or whatever an appropriate CIDR subnet block would be for the network.
 
 6. Find the printer's IP address on the network. This information can be found on the printer itself
    through the LCD display:
@@ -109,10 +109,11 @@ The goals of this repository are to
    1. Administrator Settings
    2. FTP Scan Profile
 
-   *Note: If the administrator username/password are asked for, look for it in my password manager.*
+   **Note to self: If the administrator username/password are asked for, use the values I keep in my
+   password manager under `Brother Printer Admin`**
 
-   Then, create a few profiles. Profiles can be selected in the "Scan to FTP" menu on the printer
-   and specify some properties of the scan, such as DPI, file type, etc.
+   Then, if no profiles exist, create a few. Profiles can be selected in the "Scan to FTP" menu on
+   the printer and specify some properties of the scan, such as DPI, file type, etc.
 
    ![profile](docs/profile.png)
 
@@ -128,6 +129,7 @@ The goals of this repository are to
    Profile-specific Parameters:
 
    - Document scanning:
+
      - Profile Name: `document`
      - File Name: `scan`
      - Quality: `Color 200`
@@ -135,6 +137,7 @@ The goals of this repository are to
      - File Size: `Middle`
 
    - Hi-Res Document scanning:
+
      - Profile Name: `document-hi-res`
      - File Name: `scan`
      - Quality: `Color 600`
@@ -142,6 +145,7 @@ The goals of this repository are to
      - File Size: `Large`
 
    - Photo scanning:
+
      - Profile Name: `photo`
      - File Name: `scan`
      - Quality: `Color 600`
