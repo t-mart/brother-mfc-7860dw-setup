@@ -16,7 +16,7 @@ Goals:
   the years, and always forget a detail or two when setting up a new computer or after installation
   of my OS.
 
-![diagram](docs/diagram.png)
+![diagram](./images/diagram.png)
 
 , and it's still a solid machine that I hope to use for years to
 come. The subscription-ification and DRM of newer printers scares me.
@@ -75,7 +75,7 @@ come. The subscription-ification and DRM of newer printers scares me.
 
 5. Create a firewall rule like the following:
 
-   ![firewall rule](docs/firewall-rule.gif)
+   ![firewall rule](./images/firewall-rule.gif)
 
    The main parts are:
 
@@ -99,7 +99,7 @@ come. The subscription-ification and DRM of newer printers scares me.
    5. Press the down arrow until you reach `2. IP Address`. Press the `OK` button.
    6. Record the displayed IP address.
 
-      ![ip on lcd](docs/ip.png)
+      ![ip on lcd](./images/ip.png)
 
 7. Navigate to that IP address in a browser. Then, in the navigational menu, go to:
 
@@ -112,7 +112,7 @@ come. The subscription-ification and DRM of newer printers scares me.
    Then, if no profiles exist, create a few. Profiles can be selected in the "Scan to FTP" menu on
    the printer and specify some properties of the scan, such as DPI, file type, etc.
 
-   ![profile](docs/profile.png)
+   ![profile](./images/profile.png)
 
    Common Parameters:
 
