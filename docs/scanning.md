@@ -145,5 +145,19 @@ meet the goals above. In this repository, I provide:
      - File Type: `PDF`
      - File Size: `Large`
 
-9. Do a test scan to ensure it works 🤞. Profiles can be selected in the "Scan to FTP" function menu
-   on the printer.
+9. Do a test scan to ensure it works 🤞. See below.
+
+## Actually scanning stuff
+
+Now, we put our preparation to action. Here's how to scan documents:
+
+1. Pressing the translucent "SCAN" button on the machine.
+2. Pressing the down arrow button once so that "Scan to FTP" is showing on the LCD.
+3. Press the black circular "OK" button to select it.
+4. Using the up/down arrow buttons to cycle through the profiles on the LCD.
+5. On the desired profile, press the "OK" button again.
+6. Place a document/image on the glass or in the document feeder.
+7. Then press the green "Start" button.
+8. Once scanning is complete, the document should show up in the scans folder set up previously.
+
+   ![Scans in folder](./images/scan-folder.png)
