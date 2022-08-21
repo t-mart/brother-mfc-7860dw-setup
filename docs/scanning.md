@@ -1,27 +1,21 @@
 # Scanning Setup
 
-Goals:
+Here, I describe the scanning setup I use. I've done this so many times over the years, and always
+forget a detail or two when setting up a new computer or after installation of my OS.
 
-- Provide an application that enables "easy" scanning. Specifically, provide a docker container that
-  runs an FTP server, which can then be targetted by the printer. Further, the solution must be able
-  to do the following:
+## Goals
 
-  - Contain no proprietary software that may stop working one day.
-  - Put files immediately on your system.
-  - Can be driven entirely from the the printer. Otherwise, you're running back and forth to the
-    computer to start additional scans or to the printer to load more documents.
-  - Offer PDF and JPEG outputs.
-
-- Document (with this readme) the setup, so it can be reproduced. I've done this so many times over
-  the years, and always forget a detail or two when setting up a new computer or after installation
-  of my OS.
-
-![diagram](./images/diagram.png)
-
-, and it's still a solid machine that I hope to use for years to
-come. The subscription-ification and DRM of newer printers scares me.
+- Put scanned files immediately on the host system. No email, etc.
+- Can be driven entirely from the the printer. Otherwise, you're running back and forth to the
+  computer to start additional scans or to the printer to load more documents.
+- Output PDF and JPEG documents in a variety of DPIs. (This is really a scanner feature, but still,
+  I want to be able to access those features from the method.)
+- Don't use proprietary software that may stop working one day.
 
 ## Implementation
+
+The premise of this method is that the scanner can upload files to an FTP server that allows me to
+meet the goals above. In this repository, I provide:
 
 - A Docker Compose application that specifies:
   - An FTP server with a decent level of configurability, logging, and security.
@@ -31,7 +25,10 @@ come. The subscription-ification and DRM of newer printers scares me.
   - Bind mounting of the FTP server's file storage to a convenient directory on my filesystem.
   - A restart policy of `unless-stopped`. This has Docker bring the application automatically up if
     I restart my my computer.
-- Firewall rule (for Windows) that permits the incoming connection from the printer.
+- Firewall rule (for Windows) setup instructions that permits the incoming connection from the
+  printer.
+
+![diagram](./images/diagram.png)
 
 ## Steps
 
@@ -101,7 +98,7 @@ come. The subscription-ification and DRM of newer printers scares me.
 
       ![ip on lcd](./images/ip.png)
 
-7. Navigate to that IP address in a browser. Then, in the navigational menu, go to:
+7. Navigate to that IP address in a browser (port 80). Then, in the navigational menu, go to:
 
    1. Administrator Settings
    2. FTP Scan Profile
@@ -109,8 +106,7 @@ come. The subscription-ification and DRM of newer printers scares me.
    **Note to self: If the administrator username/password are asked for, use the values I keep in my
    password manager under `Brother Printer Admin`**
 
-   Then, if no profiles exist, create a few. Profiles can be selected in the "Scan to FTP" menu on
-   the printer and specify some properties of the scan, such as DPI, file type, etc.
+8. Create printer profiles that specify the host FTP server and print quality/output options.
 
    ![profile](./images/profile.png)
 
@@ -149,4 +145,5 @@ come. The subscription-ification and DRM of newer printers scares me.
      - File Type: `PDF`
      - File Size: `Large`
 
-8. Do a test scan to ensure it works. 🤞
+9. Do a test scan to ensure it works 🤞. Profiles can be selected in the "Scan to FTP" function menu
+   on the printer.
