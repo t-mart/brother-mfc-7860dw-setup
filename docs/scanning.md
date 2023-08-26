@@ -19,7 +19,12 @@ on the host machine.
 1. Set up an FTP server. I set this up as a Windows service, so it always runs
    when my computer is on. See documentation for how I do this [here](https://github.com/t-mart/my-nssm-setup#unftp).
 
-2. Find the printer's IP address on the network. This information can be found on the printer itself
+2. Ensure the network interface mode is set to "private". This will let other hosts (the
+   printer) connect without firewall refusal.
+
+   ![ip on lcd](./images/private-network.png)
+
+3. Find the printer's IP address on the network. This information can be found on the printer itself
    through the LCD display:
 
    1. Press the `Menu` button.
@@ -31,7 +36,7 @@ on the host machine.
 
       ![ip on lcd](./images/ip.png)
 
-3. Navigate to that IP address in a browser (port 80). Then, in the navigational menu, go to:
+4. Navigate to that IP address in a browser (port 80). Then, in the navigational menu, go to:
 
    1. Administrator Settings
    2. FTP Scan Profile
@@ -39,7 +44,7 @@ on the host machine.
    **Note to self: If the administrator username/password are asked for, use the values I keep in my
    password manager under `Brother Printer Admin`**
 
-4. Create printer profiles that specify the host FTP server and print quality/output options.
+5. Create printer profiles that specify the host FTP server and print quality/output options.
 
    ![profile](./images/profile.png)
 
@@ -78,7 +83,7 @@ on the host machine.
      - File Type: `PDF`
      - File Size: `Large`
 
-5. Do a test scan to ensure it works 🤞. See below.
+6. Do a test scan to ensure it works 🤞. See below.
 
 ## Actually scanning stuff
 
