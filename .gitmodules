@@ -1,3 +1,0 @@
-[submodule "docker-vsftpd"]
-	path = docker-vsftpd
-	url = https://github.com/t-mart/docker-vsftpd.git

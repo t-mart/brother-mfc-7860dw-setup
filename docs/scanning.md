@@ -1,92 +1,25 @@
 # Scanning Setup
 
-Here, I describe the scanning setup I use. I've done this so many times over the years, and always
-forget a detail or two when setting up a new computer or after installation of my OS.
+Here, I describe the FTP scanning setup I use. It requires an FTP server to run
+on the host machine.
 
-## Goals
+## Features
 
 - Put scanned files immediately on the host system. No email, etc.
-- Can be driven entirely from the the printer. Otherwise, you're running back and forth to the
-  computer to start additional scans or to the printer to load more documents.
-- Output PDF and JPEG documents in a variety of DPIs. (This is really a scanner feature, but still,
-  I want to be able to access those features from the method.)
+- Can be driven entirely from the the printer. Otherwise, you're running back
+  and forth to the computer to start additional scans or to the printer to load
+  more documents.
+- Output PDF and JPEG documents in a variety of DPIs. (This is really a scanner
+  feature, but still, I want to be able to access those features from the
+  method.)
 - Don't use proprietary software that may stop working one day.
-
-## Implementation
-
-The premise of this method is that the scanner can upload files to an FTP server that allows me to
-meet the goals above. In this repository, I provide:
-
-- A Docker Compose application that specifies:
-  - An FTP server with a decent level of configurability, logging, and security.
-    - The server is based off of
-      [markhobson/docker-vsftpd.git](https://github.com/markhobson/docker-vsftpd.git), with some
-      quality of life improvements.
-  - Bind mounting of the FTP server's file storage to a convenient directory on my filesystem.
-  - A restart policy of `unless-stopped`. This has Docker bring the application automatically up if
-    I restart my my computer.
-- Firewall rule (for Windows) setup instructions that permits the incoming connection from the
-  printer.
-
-![diagram](./images/diagram.png)
 
 ## Steps
 
-1. Clone this repo (and get the git submodule that contains the dockerized vsftpd):
+1. Set up an FTP server. I set this up as a Windows service, so it always runs
+   when my computer is on. See documentation for how I do this [here](https://github.com/t-mart/my-nssm-setup#unftp).
 
-   ```shell
-   git clone https://github.com/t-mart/printer-ftp-server.git
-   cd printer-ftp-server/
-   git submodule init
-   git submodule update
-   ```
-
-2. Save the username and password of the FTP server in a file in the build context of the server
-   image:
-
-   **Note to self: I keep these in my password manager under
-   `Brother Printer FTP Account to Desktop`**
-
-   ```shell
-   cp docker-vsftpd/virtual_users.template.txt docker-vsftpd/virtual_users.txt
-   vi docker-vsftpd/virtual_users.txt  # edit in vi
-   ```
-
-   Make sure to follow the format:
-
-   ```text
-   username
-   password
-   ```
-
-   (You can even add more users if you want. Just add more pairs of username/password lines.)
-
-3. Ensure the volume bind source (i.e. the directory it points to) in `docker-compose.yml` exists on
-   the host system. Default is `C:\Users\tim\Desktop\scans`. Update it if not.
-
-4. Run this docker compose service:
-
-   ```shell
-   docker compose up --detach --build --always-recreate-deps  # or simply `make up` if you have make
-   ```
-
-5. Create a firewall rule like the following:
-
-   ![firewall rule](./images/firewall-rule.gif)
-
-   The main parts are:
-
-   - Protocols and Ports tab
-     - Protocols and Ports section
-       - Protocol Type: `TCP`
-       - Local port: `Specific Ports` and `20, 21, 21100-21110` (20 is for FTP data, 21 is for FTP
-         control, 21100-21110 are for passive mode.)
-   - Scope tab
-     - Remote IP address section
-       - `These IP addresses:`
-         - `192.168.1.0/24`, or whatever an appropriate CIDR subnet block would be for the network.
-
-6. Find the printer's IP address on the network. This information can be found on the printer itself
+2. Find the printer's IP address on the network. This information can be found on the printer itself
    through the LCD display:
 
    1. Press the `Menu` button.
@@ -98,7 +31,7 @@ meet the goals above. In this repository, I provide:
 
       ![ip on lcd](./images/ip.png)
 
-7. Navigate to that IP address in a browser (port 80). Then, in the navigational menu, go to:
+3. Navigate to that IP address in a browser (port 80). Then, in the navigational menu, go to:
 
    1. Administrator Settings
    2. FTP Scan Profile
@@ -106,15 +39,15 @@ meet the goals above. In this repository, I provide:
    **Note to self: If the administrator username/password are asked for, use the values I keep in my
    password manager under `Brother Printer Admin`**
 
-8. Create printer profiles that specify the host FTP server and print quality/output options.
+4. Create printer profiles that specify the host FTP server and print quality/output options.
 
    ![profile](./images/profile.png)
 
    Common Parameters:
 
    - Host Address: IP of my computer (find with `ipconfig`)
-   - Username: username from step #2
-   - Password: password from step #2
+   - Username: anonymous
+   - Password: anonymous
    - Store Directory: `/`
    - Passive Mode: `On`
    - Port Number: `21`
@@ -145,7 +78,7 @@ meet the goals above. In this repository, I provide:
      - File Type: `PDF`
      - File Size: `Large`
 
-9. Do a test scan to ensure it works 🤞. See below.
+5. Do a test scan to ensure it works 🤞. See below.
 
 ## Actually scanning stuff
 
