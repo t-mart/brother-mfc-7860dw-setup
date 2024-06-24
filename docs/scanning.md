@@ -16,8 +16,8 @@ on the host machine.
 
 ## Steps
 
-1. Set up an FTP server. I set this up as a Windows service, so it always runs
-   when my computer is on. See documentation for how I do this [here](https://github.com/t-mart/my-nssm-setup#unftp).
+1. Set up an FTP server. ~~I set this up as a Windows service, so it always runs
+   when my computer is on. See documentation for how I do this [here](https://github.com/t-mart/my-nssm-setup#unftp).~~ I now set this up on my home Debian server. See how I do that [here](/docs/ftp-http-server.md).
 
 2. Ensure the network interface mode is set to "private". This will let other hosts (the
    printer) connect without firewall refusal.
