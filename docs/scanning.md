@@ -50,7 +50,7 @@ on the host machine.
 
    Common Parameters:
 
-   - Host Address: IP of my computer (find with `ipconfig`)
+   - Host Address: IP of FTP server set up in Step 1
    - Username: anonymous
    - Password: anonymous
    - Store Directory: `/`
